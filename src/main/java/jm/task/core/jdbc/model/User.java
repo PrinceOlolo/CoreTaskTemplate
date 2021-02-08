@@ -22,10 +22,22 @@ public class User {
 
     }
 
-    public User(String name, String lastName, Byte age) {
+    public User (String name, String lastName, Byte age) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
+    }
+
+    public User (Long id, String name, String lastName, Byte age) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+    }
+    @Override
+    public String toString() {
+        return (id + ", " + name + ", " + lastName + ", " + age);
+
     }
 
     public Long getId() {
