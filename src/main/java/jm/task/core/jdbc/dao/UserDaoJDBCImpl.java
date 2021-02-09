@@ -23,8 +23,6 @@ public class UserDaoJDBCImpl implements UserDao {
             "ENGINE = InnoDB\n" +
             "DEFAULT CHARACTER SET = utf8;";
 
-    Statement statement = null;
-    PreparedStatement prepareStatement = null;
     List<User> users = new ArrayList<>();
 
     public UserDaoJDBCImpl() {
@@ -32,80 +30,45 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        try {
-            statement = Util.connectDB().createStatement();
+        try (Statement statement = Util.connectDB().createStatement()) {
             statement.execute(CREATE_TABLE);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException throwables) {
-                System.out.println("Ошибка закрытия Соединения с базой данных!");
-            }
-            Util.disconnectDB();
         }
     }
 
     public void dropUsersTable() {
-        try {
-            statement = Util.connectDB().createStatement();
+        try (Statement statement = Util.connectDB().createStatement()) {
             statement.execute(DROP_TABLE);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException throwables) {
-                System.out.println("Ошибка закрытия Соединения с базой данных!");
-            }
-            Util.disconnectDB();
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-       Integer ageInt = Integer.valueOf(age);
-        try {
-            prepareStatement = Util.connectDB().prepareStatement(SAVE_USER);
+        Integer ageInt = Integer.valueOf(age);
+        try (PreparedStatement prepareStatement = Util.connectDB().prepareStatement(SAVE_USER)) {
             prepareStatement.setString(1, name);
             prepareStatement.setString(2, lastName);
             prepareStatement.setInt(3, ageInt);
             prepareStatement.execute();
             System.out.printf("User с именем – %s добавлен в базу данных\n", name);
-
         } catch (SQLException throwables) {
-            System.out.println("При попытке добавить нового пользователя в базу данных произошла ошибка:\n"+ throwables);
-        } finally {
-            try {
-                prepareStatement.close();
-            } catch (SQLException throwables) {
-                System.out.println("Ошибка закрытия Соединения с базой данных!");
-            }
-            Util.disconnectDB();
+            System.out.println("При попытке добавить нового пользователя в базу данных произошла ошибка:\n" + throwables);
         }
     }
 
     public void removeUserById(long id) {
-        try {
-            prepareStatement = Util.connectDB().prepareStatement(DELETE_USER);
+        try (PreparedStatement prepareStatement = Util.connectDB().prepareStatement(DELETE_USER)) {
             prepareStatement.setLong(1, id);
             prepareStatement.execute();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        } finally {
-            try {
-                prepareStatement.close();
-            } catch (SQLException throwables) {
-                System.out.println("Ошибка закрытия Соединения с базой данных!");
-            }
-            Util.disconnectDB();
         }
-
     }
 
     public List<User> getAllUsers() {
-        try {
-            statement = Util.connectDB().createStatement();
+        try (Statement statement = Util.connectDB().createStatement()) {
             ResultSet resultSet = statement.executeQuery(GET_ALL_USERS);
 
             while (resultSet.next()) {
@@ -116,30 +79,18 @@ public class UserDaoJDBCImpl implements UserDao {
                 User user = new User(id, name, lastname, age);
                 users.add(user);
             }
-            statement.close();
-            Util.disconnectDB();
             return users;
         } catch (SQLException throwables) {
             System.out.println("При попытке создать список пользователей произошла ошибка:\n" + throwables);
-        } finally {
-         Util.disconnectDB();
         }
         return users;
     }
 
     public void cleanUsersTable() {
-        try {
-            statement = Util.connectDB().createStatement();
+        try (Statement statement = Util.connectDB().createStatement()){
             statement.execute(CLEAN_TABLE);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException throwables) {
-                System.out.println("Ошибка закрытия Соединения с базой данных!");
-            }
-            Util.disconnectDB();
         }
     }
 }

@@ -25,17 +25,6 @@ public class Util {
         return connection;
     }
 
-    public static void disconnectDB() {
-        try {
-
-            if (!connection.isClosed()) {
-                connection.close();
-            }
-
-        } catch (SQLException throwables) {
-            System.out.println("Ошибка закрытия соединения с базой данных! \n Возможно, соединение не было открыто \n" + throwables);
-        }
-    }
 }
 
 
