@@ -87,7 +87,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try (Statement statement = Util.connectDB().createStatement()){
+        try (Statement statement = Util.connectDB().createStatement()) {
             statement.execute(CLEAN_TABLE);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
