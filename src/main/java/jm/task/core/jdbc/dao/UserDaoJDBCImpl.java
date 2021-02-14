@@ -12,8 +12,8 @@ public class UserDaoJDBCImpl implements UserDao {
     private static final String SAVE_USER = "INSERT INTO users(name,lastname,age)" + " VALUES(?,?,?)";
     private static final String GET_ALL_USERS = "SELECT * FROM users";
     private static final String DELETE_USER = "DELETE FROM users WHERE id=?";
-    public static final String CLEAN_TABLE = "DELETE FROM users";
-    public static final String DROP_TABLE = "DROP TABLE IF EXISTS users";
+    private static final String CLEAN_TABLE = "DELETE FROM users";
+    private static final String DROP_TABLE = "DROP TABLE IF EXISTS users";
     private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `testbase`.`users` (\n" +
             "  `id` BIGINT NOT NULL AUTO_INCREMENT,\n" +
             "  `name` VARCHAR(45) NOT NULL,\n" +
@@ -22,7 +22,15 @@ public class UserDaoJDBCImpl implements UserDao {
             "  PRIMARY KEY (`id`))\n" +
             "ENGINE = InnoDB\n" +
             "DEFAULT CHARACTER SET = utf8;";
+    private static Statement statement;
 
+    static {
+        try {
+            statement = Util.connectDB().createStatement();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
     List<User> users = new ArrayList<>();
 
     public UserDaoJDBCImpl() {
@@ -30,7 +38,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        try (Statement statement = Util.connectDB().createStatement()) {
+        try {
             statement.execute(CREATE_TABLE);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -38,7 +46,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try (Statement statement = Util.connectDB().createStatement()) {
+        try {
             statement.execute(DROP_TABLE);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -68,7 +76,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public List<User> getAllUsers() {
-        try (Statement statement = Util.connectDB().createStatement()) {
+        try {
             ResultSet resultSet = statement.executeQuery(GET_ALL_USERS);
 
             while (resultSet.next()) {
@@ -87,10 +95,11 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try (Statement statement = Util.connectDB().createStatement()) {
+        try {
             statement.execute(CLEAN_TABLE);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 }
+ //(Statement statement = Util.connectDB().createStatement())
