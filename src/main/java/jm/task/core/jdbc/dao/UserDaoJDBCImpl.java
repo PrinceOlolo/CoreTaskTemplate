@@ -9,6 +9,8 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
+    private static Connection connection = Util.connectDB();
+    private static Statement statement;
     private static final String SAVE_USER = "INSERT INTO users(name,lastname,age)" + " VALUES(?,?,?)";
     private static final String GET_ALL_USERS = "SELECT * FROM users";
     private static final String DELETE_USER = "DELETE FROM users WHERE id=?";
@@ -22,7 +24,7 @@ public class UserDaoJDBCImpl implements UserDao {
             "  PRIMARY KEY (`id`))\n" +
             "ENGINE = InnoDB\n" +
             "DEFAULT CHARACTER SET = utf8;";
-    private static Statement statement;
+
 
     static {
         try {
@@ -55,7 +57,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         Integer ageInt = Integer.valueOf(age);
-        try (PreparedStatement prepareStatement = Util.connectDB().prepareStatement(SAVE_USER)) {
+        try (PreparedStatement prepareStatement = connection.prepareStatement(SAVE_USER)) {
             prepareStatement.setString(1, name);
             prepareStatement.setString(2, lastName);
             prepareStatement.setInt(3, ageInt);
@@ -67,7 +69,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        try (PreparedStatement prepareStatement = Util.connectDB().prepareStatement(DELETE_USER)) {
+        try (PreparedStatement prepareStatement = connection.prepareStatement(DELETE_USER)) {
             prepareStatement.setLong(1, id);
             prepareStatement.execute();
         } catch (SQLException throwables) {
