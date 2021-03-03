@@ -90,8 +90,7 @@ public class UserDaoHibernateImpl implements UserDao {
             return session.createQuery("SELECT a FROM User a ", User.class).getResultList();
         } catch (Exception e) {
             System.err.println(e);
-        }
-        finally {
+        } finally {
             session.close();
         }
         return null;
