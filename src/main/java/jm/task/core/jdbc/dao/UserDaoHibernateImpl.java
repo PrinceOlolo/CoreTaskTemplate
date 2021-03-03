@@ -4,10 +4,7 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 
-
-import javax.persistence.Query;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -15,11 +12,8 @@ public class UserDaoHibernateImpl implements UserDao {
     private static SessionFactory sessionFactory = Util.connectHDB();
     private static Session session;
 
-
     public UserDaoHibernateImpl() {
-
     }
-
 
     @Override
     public void createUsersTable() {
@@ -47,7 +41,6 @@ public class UserDaoHibernateImpl implements UserDao {
         } finally {
             session.close();
         }
-
     }
 
     @Override
@@ -62,8 +55,6 @@ public class UserDaoHibernateImpl implements UserDao {
         } finally {
             session.close();
         }
-
-
     }
 
     @Override
@@ -96,7 +87,6 @@ public class UserDaoHibernateImpl implements UserDao {
         return null;
     }
 
-
     @Override
     public void cleanUsersTable() {
         try {
@@ -109,6 +99,5 @@ public class UserDaoHibernateImpl implements UserDao {
         } finally {
             session.close();
         }
-
     }
 }

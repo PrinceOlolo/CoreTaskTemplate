@@ -13,7 +13,6 @@ public class UserDaoJDBCImpl implements UserDao {
     List<User> users = new ArrayList<>();
 
     public UserDaoJDBCImpl() {
-
     }
 
     public void createUsersTable() {

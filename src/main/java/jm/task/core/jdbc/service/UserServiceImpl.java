@@ -14,17 +14,13 @@ public class UserServiceImpl implements UserService {
         uh.createUsersTable();
     }
 
-    public void dropUsersTable() {
-        uh.dropUsersTable();
-    }
+    public void dropUsersTable() { uh.dropUsersTable(); }
 
     public void saveUser(String name, String lastName, byte age) {
         uh.saveUser(name, lastName, age);
     }
 
-    public void removeUserById(long id) {
-        uh.removeUserById(id);
-    }
+    public void removeUserById(long id) { uh.removeUserById(id); }
 
     public List<User> getAllUsers() {
         return uh.getAllUsers();
